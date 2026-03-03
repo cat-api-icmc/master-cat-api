@@ -1,0 +1,38 @@
+services:
+  django-api:
+    build: .
+    image: catapiicmc/django-cat-api
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - cat-api
+
+  plumber-api:
+    build: .
+    image: catapiicmc/plumber-cat-api
+    command: Rscript main.R
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    networks:
+      - cat-api
+
+  cat-app:
+    build: .
+    image: catapiicmc/cat-app
+    command: serve -s build -l tcp://0.0.0.0:3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - cat-api
+
+networks:
+  cat-api:
+    driver: bridge
+    name: cat-api
+
