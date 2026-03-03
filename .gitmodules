@@ -1,0 +1,12 @@
+[submodule "cat-api-django"]
+	path = cat-api-django
+	url = https://github.com/cat-api-icmc/master-cat-api-django.git
+[submodule "cat-api-adaptive"]
+	path = cat-api-adaptive
+	url = https://github.com/cat-api-icmc/master-cat-api-plumber.git
+[submodule "cat-app"]
+	path = cat-app
+	url = https://github.com/cat-api-icmc/master-cat-front.git
+[submodule "cat-api-analytics"]
+	path = cat-api-analytics
+	url = https://github.com/cat-api-icmc/master-cat-api-analytics.git
