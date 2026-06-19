@@ -1,33 +1,38 @@
 services:
-  django-api:
-    build: .
-    image: catapiicmc/django-cat-api
-    volumes:
-      - .:/app
+  plumber-api:
+    build: ./cat-api-adaptive
+    image: catapiicmc/plumber-cat-api
+    env_file:
+      - .env
     ports:
-      - "8000:8000"
+      - "8080:8080"
     networks:
       - cat-api
 
-  plumber-api:
-    build: .
-    image: catapiicmc/plumber-cat-api
-    command: Rscript main.R
+  django-api:
+    build: ./cat-api-django
+    image: catapiicmc/django-cat-api
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
     ports:
-      - "8080:8080"
-    volumes:
-      - .:/app
+      - "8000:8000"
+    depends_on:
+      plumber-api:
+        condition: service_started
     networks:
       - cat-api
 
   cat-app:
-    build: .
+    build:
+      context: ./cat-app
+      dockerfile: dockerfile
     image: catapiicmc/cat-app
-    command: serve -s build -l tcp://0.0.0.0:3000
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
+    depends_on:
+      django-api:
+        condition: service_started
     networks:
       - cat-api
 
@@ -35,4 +40,3 @@ networks:
   cat-api:
     driver: bridge
     name: cat-api
-
